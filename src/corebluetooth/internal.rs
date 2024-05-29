@@ -1002,6 +1002,7 @@ impl CoreBluetoothInternal {
     async fn wait_for_message(&mut self) {
         select! {
             delegate_msg = self.delegate_receiver.select_next_some() => {
+                println!("Received delegate message {:#?}", delegate_msg)
                 match delegate_msg {
                     // TODO DidUpdateState does not imply that the adapter is
                     // on, just that it updated state.
@@ -1080,6 +1081,7 @@ impl CoreBluetoothInternal {
             }
             adapter_msg = self.message_receiver.select_next_some() => {
                 trace!("Adapter message!");
+                println!("Received adapter message {:#?}", adapter_msg)
                 match adapter_msg {
                     CoreBluetoothMessage::StartScanning{filter} => self.start_discovery(filter),
                     CoreBluetoothMessage::StopScanning => self.stop_discovery(),
